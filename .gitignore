@@ -1,4 +1,4 @@
 *.DS_Store
 *.pyc
-*/input.txt
-*/example.txt
+*input.txt
+*example.txt
