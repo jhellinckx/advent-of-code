@@ -1,38 +1,31 @@
 import re
 import numpy as np
-
-
-def read_input(filename="input.txt"):
-    systems = []
-    with open(filename) as f:
-        lines = f.readlines()
-        i = 0
-        while i < len(lines):
-            eq_str = lines[i]
-            i += 1
-            if eq_str.startswith("Button A"):
-                eq_str += lines[i] + lines[i + 1]
-                i += 2
-                ax1, ax2, ay1, ay2, b1, b2 = [
-                    int(n)
-                    for n in re.search(
-                        r"A: X\+(\d+), Y\+(\d+)[\s\S]*B: X\+(\d+), Y\+(\d+)[\s\S]*X=(\d+), Y=(\d+)",
-                        eq_str,
-                    ).groups()
-                ]
-                systems.append((np.array([[ax1, ay1], [ax2, ay2]]), np.array([b1, b2])))
-    return systems
+from functools import partial
+from itertools import batched
 
 
 def solve(max, add_b=0):
-    systems = read_input()
-    s = 0
-    for a, b in systems:
-        x, y = np.linalg.solve(a, b + add_b)
-        x, y = round(x, 2), round(y, 2)
-        if x.is_integer() and y.is_integer() and 0 <= x <= max and 0 <= y <= max:
-            s += int(x) * 3 + int(y) * 1
-    return s
+    return int(
+        sum(
+            sum(
+                np.array([3, 1]) * x
+                if all(xi.is_integer() for xi in x) and all(0 <= xi <= max for xi in x)
+                else np.array([0, 0])
+            )
+            for x in [
+                np.array(
+                    list(map(partial(round, ndigits=2), np.linalg.solve(a, b + add_b)))
+                )
+                for a, b in [
+                    (np.array([[ax1, ay1], [ax2, ay2]]), np.array([b1, b2]))
+                    for ax1, ax2, ay1, ay2, b1, b2 in batched(
+                        [int(s) for s in re.findall(r"\d+", open("input.txt").read())],
+                        6,
+                    )
+                ]
+            ]
+        )
+    )
 
 
 def puzzle1():
