@@ -34,7 +34,7 @@ def shortest_paths(m, start, end):
         if c > min_cost:
             break
         if (i, j) == end:
-            min_cost = min(min_cost, c)
+            min_cost = c
             paths.append(p)
             continue
         if visited[i, j, o] < c:
