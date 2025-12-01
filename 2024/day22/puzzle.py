@@ -57,7 +57,7 @@ def puzzle2():
         secrets = [first_secret] + find_all_secrets(first_secret, 2000)
         changes_seen = set()
         for i, secret in enumerate(secrets):
-            last_digit = int(str(secret)[-1])
+            last_digit = secret % 10
             last_digits[i] = last_digit
             if i == 0:
                 continue
