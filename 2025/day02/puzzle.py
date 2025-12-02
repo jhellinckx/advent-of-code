@@ -22,8 +22,8 @@ def puzzle2():
             s = str(i)
             for j in range(1, len(s) // 2 + 1):
                 if len(s) % j == 0:
-                    ss = [s[max(0, k - j) : k] for k in range(j, len(s) + j, j)]
-                    if len(set(ss)) == 1 and len(ss) >= 2:
+                    ss = {s[max(0, k - j) : k] for k in range(j, len(s) + j, j)}
+                    if len(ss) == 1:
                         ids.append(i)
                         break
     return sum(ids)
