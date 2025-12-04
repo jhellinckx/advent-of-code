@@ -26,28 +26,28 @@ def get_rolls(m):
 
 
 def puzzle1():
-    return sum(1 for c in get_rolls(read_input()).values() if c <= MAX_ROLLS)
+    return sum(1 for count in get_rolls(read_input()).values() if count <= MAX_ROLLS)
 
 
-def lift_roll(r, rolls, lifted=set()):
-    if r not in lifted:
-        lifted.add(r)
-        i, j = r
+def lift_roll(roll, rolls, lifted=set()):
+    if roll not in lifted:
+        lifted.add(roll)
+        i, j = roll
         for di, dj in DELTAS:
-            a = i + di, j + dj
-            if a in rolls and a not in lifted:
-                rolls[a] -= 1
-                if rolls[a] <= MAX_ROLLS:
-                    lift_roll(a, rolls, lifted)
+            adj = i + di, j + dj
+            if adj in rolls and adj not in lifted:
+                rolls[adj] -= 1
+                if rolls[adj] <= MAX_ROLLS:
+                    lift_roll(adj, rolls, lifted)
 
 
 def puzzle2():
     rolls = get_rolls(read_input())
     lifted = set()
-    for r in [r for r, c in rolls.items() if c <= MAX_ROLLS]:
-        lift_roll(r, rolls, lifted)
+    for roll in [roll for roll, count in rolls.items() if count <= MAX_ROLLS]:
+        lift_roll(roll, rolls, lifted)
     return len(lifted)
 
 
 if __name__ == "__main__":
-    print(puzzle1())
+    print(puzzle2())
