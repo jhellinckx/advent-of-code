@@ -17,11 +17,9 @@ def remove_overlaps(ranges):
     for i, (l1, u1) in enumerate(ranges):
         for j, (l2, u2) in enumerate(ranges):
             if i != j:
-                if l1 == l2 and u1 == u2:
+                if l1 >= l2 and u1 <= u2:
                     return remove_overlaps(ranges[:i] + ranges[i + 1 :])
                 if l2 <= l1 <= u2:
-                    if u1 <= u2:
-                        return remove_overlaps(ranges[:i] + ranges[i + 1 :])
                     ranges[i] = (u2 + 1, u1)
                     return remove_overlaps(ranges)
                 if l2 <= u1 <= u2:
